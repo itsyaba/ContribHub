@@ -5,12 +5,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Testimonials = () => {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-primary/10 via-primary/5 to-background">
+    <section className="w-full py-12 md:py-24 lg:py-32 ">
       <div className="container px-4 md:px-6">
-        <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-8">
+        <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-6">
           What Our Users Say
         </h1>
-        <p className="text-xl text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
+        <p className="text-xl text-muted-foreground text-center mb-8 max-w-3xl mx-auto">
           Discover how ContribHub has helped developers around the world contribute to open-source
           projects and grow their skills.
         </p>
@@ -79,10 +79,10 @@ function TestimonialCard({
   avatar: string;
 }) {
   return (
-    <Card className="flex flex-col justify-between">
+    <Card className="flex flex-col justify-between bg-black text-white">
       <CardContent className="pt-6">
         <div className="flex items-start space-x-4 mb-4">
-          <Avatar className="w-12 h-12">
+          <Avatar className="w-12 h-12 ">
             <AvatarImage src={avatar} alt={name} />
             <AvatarFallback>
               {name
@@ -99,13 +99,6 @@ function TestimonialCard({
           </div>
         </div>
         <p className="text-muted-foreground mb-4">{testimonial}</p>
-        <div className="flex text-yellow-400">
-          <Star className="w-5 h-5 fill-current" />
-          <Star className="w-5 h-5 fill-current" />
-          <Star className="w-5 h-5 fill-current" />
-          <Star className="w-5 h-5 fill-current" />
-          <Star className="w-5 h-5 fill-current" />
-        </div>
       </CardContent>
     </Card>
   );
