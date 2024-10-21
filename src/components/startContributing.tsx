@@ -8,20 +8,15 @@ import {
   IconBrandCpp,
   IconBrandFlutter,
   IconBrandJavascript,
-  IconBrandMantine,
   IconBrandMongodb,
   IconBrandNextjs,
   IconBrandNodejs,
   IconBrandPhp,
-  IconBrandPrisma,
   IconBrandPython,
   IconBrandReact,
   IconBrandReactNative,
-  IconBrandRedux,
-  IconBrandTailwind,
   IconBrandTypescript,
   IconBrandVue,
-  IconGitPullRequest,
   IconGrain,
   IconSql,
 } from "@tabler/icons-react";
@@ -113,20 +108,5 @@ export default function StartContributing() {
         </div>
       </div>
     </section>
-  );
-}
-
-function LanguageCard({ name, icon }: { name: string; icon: string }) {
-  return (
-    <Card className="group hover:border-primary transition-colors">
-      <CardContent className="p-4">
-        <Link href="#" className="flex flex-col items-center text-center space-y-2">
-          <span className="text-4xl" role="img" aria-label={name}>
-            {icon}
-          </span>
-          <span className="font-medium group-hover:text-primary transition-colors">{name}</span>
-        </Link>
-      </CardContent>
-    </Card>
   );
 }

@@ -7,9 +7,8 @@ import { Github, Globe, Users } from "lucide-react";
 export default function Home() {
   return (
     <>
-      <section></section>
-      {/* LANDING PAGE */}
-      <div className="h-screen w-full rounded-md flex md:items-center md:justify-center bg-black/[0.96] antialiased bg-grid-white/[0.02] relative overflow-hidden">
+      {/* HERO PAGE */}
+      <div className="h-screen w-full rounded-md flex items-center justify-center gap-8 bg-black/[0.96] antialiased bg-grid-white/[0.02] relative overflow-hidden">
         <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
         <div className=" p-4 max-w-7xl  mx-auto relative z-10  w-full pt-20 md:pt-0 flex items-center justify-between flex-col  gap-4">
           <div>
@@ -26,15 +25,14 @@ export default function Home() {
           </Button>
         </div>
       </div>
-      {/* LANDING PAGE */}
+      {/* HERO PAGE */}
       {/* Why ContribHub? */}
-
       <section className="w-full py-12 md:py-24 lg:py-32 bg-primary">
         <div className="container px-4 md:px-6">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">
             Why ContribHub?
           </h2>
-          <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid gap-10 sm:grid-cols-1 md:grid-cols-3">
             <FeatureCard
               icon={<Github className="h-10 w-10" />}
               title="Project Matching"
@@ -53,10 +51,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {/* START CONTRIBUTING */}
       <StartContributing />
-      {/* START CONTRIBUTING */}
-      {/* TESTIMONIALS */}
       <Testimonials />
       {/* Join ContribHub Today */}
       <section className="w-full py-12 md:py-24 lg:py-32 ">
