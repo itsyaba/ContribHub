@@ -1,12 +1,40 @@
 "use client";
 import { Code2, Menu } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "./ui/sheet";
 import { Button, buttonVariants } from "./ui/button";
+import { UserAccountNav } from "./UserAccountNav";
+import { Spinner } from "./spinner";
+import { useToast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [session, setSession] = useState(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchSession = async () => {
+      const response = await fetch("/api/auth/session");
+      if (response.ok) {
+        const data = await response.json();
+        setSession(data);
+      } else {
+        console.error("Failed to fetch session");
+        toast({
+          title: "Error",
+          description: "Failed to fetch session",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchSession();
+    setIsLoading(false);
+  }, [toast]);
+
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center justify-between absolute top-0 left-0 right-0 z-50 bg-transparent font-fredoka">
       <Link className="flex items-center justify-center" href="/">
@@ -26,18 +54,14 @@ const Navbar = () => {
         <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
           About
         </Link>
-        {/* SIGN IN BUTTON */}
-
-        <Link
-          href="/sign-in"
-          className={buttonVariants({
-            variant: "default",
-            className:
-              "text-sm font-medium underline-offset-4 bg-white text-black hover:bg-white/90",
-          })}
-        >
-          Sign In
-        </Link>
+        {isLoading && <Spinner />}
+        {session && !isLoading ? (
+          <UserAccountNav user={session?.user} />
+        ) : (
+          <Link href="/sign-in" className={buttonVariants()}>
+            Sign In
+          </Link>
+        )}
       </nav>
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
@@ -70,18 +94,17 @@ const Navbar = () => {
             >
               About
             </Link>
-            {/* SIGN IN BUTTON */}
-            <Link
-              href="/sign-in"
-              onClick={() => setIsOpen(false)}
-              className={buttonVariants({
-                variant: "default",
-                className:
-                  "text-sm font-medium underline-offset-4 bg-white text-black hover:bg-white/90",
-              })}
-            >
-              Sign In
-            </Link>
+            {isLoading && <Spinner />}
+            {session?.user && !isLoading ? (
+              <div className="flex flex-row items-center justify-start mt-1 bg-slate-700 py-3 rounded-md px-2 gap-4">
+                <UserAccountNav user={session?.user} />
+                {session?.user?.name}
+              </div>
+            ) : (
+              <Link href="/sign-in" className={buttonVariants()} onClick={() => setIsOpen(false)}>
+                Sign In
+              </Link>
+            )}
           </nav>
         </SheetContent>
       </Sheet>
