@@ -7,7 +7,6 @@ import { Button, buttonVariants } from "./ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center justify-between absolute top-0 left-0 right-0 z-50 bg-transparent font-fredoka">
       <Link className="flex items-center justify-center" href="/">
