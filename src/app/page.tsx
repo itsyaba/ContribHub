@@ -1,9 +1,10 @@
 import FeatureCard from "@/components/FeatureCard";
 import StartContributing from "@/components/startContributing";
 import Testimonials from "@/components/Testimonials";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Spotlight } from "@/components/ui/spotlight";
 import { Github, Globe, Users } from "lucide-react";
+import Link from "next/link";
 export default function Home() {
   return (
     <>
@@ -20,9 +21,12 @@ export default function Home() {
               skills, contribute with ease, and grow as a developer.
             </p>
           </div>
-          <Button variant="default" size="actionBtn">
+          <Link
+            href="/projects"
+            className={buttonVariants({ variant: "default", size: "actionBtn" })}
+          >
             Explore Projects
-          </Button>
+          </Link>
         </div>
       </div>
       {/* HERO PAGE */}

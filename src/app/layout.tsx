@@ -5,8 +5,6 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -33,14 +31,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(authOptions);
-  console.log(session?.user);
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} antialiased text-neutral-100 bg-primary `}
+        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} antialiased text-neutral-100 bg-primary`}
       >
-        {/* SESSION PROVIDER */}
         <Navbar />
         {children}
         <Footer />
