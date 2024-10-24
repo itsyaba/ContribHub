@@ -7,13 +7,36 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "./ui/sheet";
 import { Button, buttonVariants } from "./ui/button";
 import { UserAccountNav } from "./UserAccountNav";
 import { Spinner } from "./spinner";
+import { useState, useEffect } from "react";
 
 const Navbar = () => {
-  const { data: session, status } = useSession(); // NextAuth session hook
-  const isLoading = status === "loading"; // Determine loading state
+  const [isOpen, setIsOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const isLoading = status === "loading";
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <header className="px-4 lg:px-6 h-16 flex items-center justify-between absolute top-0 left-0 right-0 z-50 bg-transparent font-fredoka">
+    <header
+      className={`px-4 lg:px-6 h-16 flex items-center justify-between fixed top-0 left-0 right-0 z-50 font-fredoka transition-colors duration-300 ${
+        isScrolled ? "backdrop-blur-lg" : "backdrop-blur-none"
+      }`}
+    >
       <Link className="flex items-center justify-center" href="/">
         <Code2 className="h-8 w-8 mr-4" />
         <span className="ml-2 text-4xl font-bold tracking-wide">ContribHub</span>
@@ -41,7 +64,7 @@ const Navbar = () => {
           </Link>
         )}
       </nav>
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" className="md:hidden">
             <Menu className="h-6 w-6" />
