@@ -21,7 +21,6 @@
     "@tabler/icons-react": "^3.19.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
-    "better-auth": "^0.5.2-beta.17",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
