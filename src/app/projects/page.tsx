@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -13,66 +13,16 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Code2, Search, Star, Filter } from "lucide-react";
-import { programmingLanguagesList, difficultyLevels, projectCategories, sortBy } from "@/lib/data";
-
-const projects = [
-  {
-    id: 1,
-    name: "Project Alpha",
-    description: "A cutting-edge web framework for building scalable applications.",
-    language: "JavaScript",
-    stars: 1200,
-    category: "Web Development",
-    difficulty: "Intermediate",
-  },
-  {
-    id: 2,
-    name: "Data Cruncher",
-    description: "High-performance data processing library for big data applications.",
-    language: "Python",
-    stars: 890,
-    category: "Data Science",
-    difficulty: "Advanced",
-  },
-  {
-    id: 3,
-    name: "Mobile Kit",
-    description: "Comprehensive toolkit for cross-platform mobile app development.",
-    language: "React Native",
-    stars: 2300,
-    category: "Mobile Development",
-    difficulty: "Junior",
-  },
-  {
-    id: 4,
-    name: "AI Assistant",
-    description: "Advanced AI model for natural language processing and generation.",
-    language: "Python",
-    stars: 3100,
-    category: "Artificial Intelligence",
-    difficulty: "Guru",
-  },
-  {
-    id: 5,
-    name: "Secure Auth",
-    description: "Robust authentication and authorization system for web applications.",
-    language: "Typescript",
-    stars: 760,
-    category: "Web Development",
-    difficulty: "Intermediate",
-  },
-  {
-    id: 6,
-    name: "Cloud Manager",
-    description: "Simplified cloud infrastructure management and deployment tool.",
-    language: "Go",
-    stars: 1500,
-    category: "DevOps",
-    difficulty: "Advanced",
-  },
-  // Add more projects as needed
-];
+import { Search, Filter } from "lucide-react";
+import {
+  programmingLanguagesList,
+  difficultyLevels,
+  projectCategories,
+  sortBy,
+  projects,
+} from "@/lib/data";
+import Link from "next/link";
+import { IconBrandGithub } from "@tabler/icons-react";
 
 export default function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -81,7 +31,7 @@ export default function ProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState(sortBy[0]);
   const [filteredProjects, setFilteredProjects] = useState(projects);
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
 
   useEffect(() => {
     const result = projects.filter(
@@ -218,42 +168,59 @@ export default function ProjectsPage() {
         )}
 
         <div
-          className={`grid gap-6 ${
-            showFilters ? "md:w-3/4" : "w-full"
-          } grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}
+          className={`grid gap-6 transition-all duration-600 ${
+            showFilters ? "md:w-5/6" : "w-full"
+          } grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-fit`}
         >
           {filteredProjects.map((project) => (
-            <Card key={project.id} className="flex flex-col">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Code2 className="h-5 w-5" />
+            <Card
+              key={project.id}
+              className="group bg-slate-900/50 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 shadow-slate-400/50 h-fit"
+            >
+              <CardHeader className="flex items-center justify-between flex-row gap-2">
+                <CardTitle className="flex items-center gap-2 text-white text-lg">
                   {project.name}
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">
+                <div className=" flex items-center justify-between gap-3 w-full mb-4">
+                  <Badge variant="outline">{project.language}</Badge>
+                  <Badge
+                    className="font-light tracking-wide text-xs bg-white/10 text-white/50"
+                    variant="secondary"
+                  >
+                    {project.difficulty}
+                  </Badge>
+                </div>
                 <p className="text-muted-foreground">{project.description}</p>
               </CardContent>
-              <CardFooter className="flex flex-wrap justify-between items-center gap-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="secondary">{project.language}</Badge>
-                  <Badge variant="outline">{project.category}</Badge>
-                  <Badge>{project.difficulty}</Badge>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Star className="h-4 w-4 text-yellow-400" />
-                  <span className="text-sm text-muted-foreground">{project.stars}</span>
-                </div>
+              <CardFooter className=" flex items-center justify-start gap-3 w-full">
+                <Link
+                  href={`/projects/${project.name}`}
+                  className={buttonVariants({ variant: "default", className: "flex-grow" })}
+                >
+                  View Project
+                </Link>
+                <Link
+                  href={project.name}
+                  target="_blank"
+                  className={buttonVariants({
+                    className:
+                      " text-white/90 bg-white/30 p-2 rounded-full cursor-pointer hover:bg-white/50 transition-colors duration-200",
+                  })}
+                >
+                  <IconBrandGithub className="size-8" />
+                </Link>
               </CardFooter>
             </Card>
           ))}
+          {filteredProjects.length === 0 && (
+            <div className="text-center text-muted-foreground mt-8 mx-auto w-[60vw]  ">
+              <h1>No projects found matching your criteria.</h1>
+            </div>
+          )}
         </div>
       </div>
-
-      {filteredProjects.length === 0 && (
-        <p className="text-center text-muted-foreground mt-8">
-          No projects found matching your criteria.
-        </p>
-      )}
     </div>
   );
 }
