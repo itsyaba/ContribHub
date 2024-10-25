@@ -53,6 +53,25 @@ export default function Home() {
               description="Contribute to projects that make a difference worldwide."
             />
           </div>
+          {/* TODO: STATS */}
+          {/* <div className="mt-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div>
+                  <div className="text-4xl font-bold mb-2">50+</div>
+                  <div className="text-gray-600">Open Source Projects</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold mb-2">100+</div>
+                  <div className="text-gray-600">Contributors</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold mb-2">300+</div>
+                  <div className="text-gray-600">Community Members</div>
+                </div>
+              </div>
+            </div>
+          </div> */}
         </div>
       </section>
       <StartContributing />

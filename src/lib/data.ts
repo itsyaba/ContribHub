@@ -16,10 +16,50 @@ export const programmingLanguagesList = [
   "Sql",
 ];
 
-export const difficultyLevels = [
-  "Newbie",
-  "Junior",
-  "Intermediate",
-  "Advanced",
-  "Guru",
+export const difficultyLevels = ["Newbie", "Junior", "Intermediate", "Advanced", "Guru"];
+
+export const projectCategories = [
+  "Web Development",
+  "Mobile Development",
+  "Data Science",
+  "Machine Learning",
+  "Artificial Intelligence",
+  "Blockchain",
+  "DevOps",
+  "Cloud Computing",
+  "Cybersecurity",
+  "Game Development",
+  "IoT",
+  "AR/VR",
+  "3D Graphics",
+  "Robotics",
+  "Natural Language Processing",
+  "Computer Vision",
+  "Embedded Systems",
+  "Quantum Computing",
+  "Augmented Reality",
+  "Virtual Reality",
+  "Blockchain",
+  "Cryptocurrency",
+  "Smart Contracts",
+  "Decentralized Finance (DeFi)",
+  "Artificial Intelligence",
+  "Machine Learning",
+  "Deep Learning",
+  "Natural Language Processing",
+  "Computer Vision",
+  "Robotics",
+  "IoT",
+  "AR/VR",
+  "3D Graphics",
+  "Embedded Systems",
+  "Quantum Computing",
+  "Augmented Reality",
+  "Virtual Reality",
+  "Blockchain",
+  "Cryptocurrency",
+  "Smart Contracts",
 ];
+
+export const sortBy = ["Most Recent", "Difficulty (easier first)", "Difficulty (harder first)"];
+

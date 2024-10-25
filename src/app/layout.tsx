@@ -4,8 +4,8 @@ import { Fredoka } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
+import Provider from "@/components/Provider";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -33,17 +33,17 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionProvider>
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} antialiased text-neutral-100 bg-primary`}
-        >
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} antialiased text-neutral-100 bg-primary`}
+      >
+        <Provider>
           <Navbar />
           {children}
           <Footer />
           <Toaster />
-        </body>
-      </html>
-    </SessionProvider>
+        </Provider>
+      </body>
+    </html>
   );
 }
