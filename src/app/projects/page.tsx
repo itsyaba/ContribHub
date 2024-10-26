@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,8 +24,12 @@ import {
 } from "@/lib/data";
 import Link from "next/link";
 import { IconBrandGithub } from "@tabler/icons-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ProjectsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
@@ -32,6 +37,24 @@ export default function ProjectsPage() {
   const [sortOption, setSortOption] = useState(sortBy[0]);
   const [filteredProjects, setFilteredProjects] = useState(projects);
   const [showFilters, setShowFilters] = useState(true);
+
+  useEffect(() => {
+    const difficultyParam = searchParams.get("difficulty");
+    const languagesParam = searchParams.get("languages");
+    const searchTermParams = searchParams.get("search");
+
+    if (difficultyParam) {
+      setSelectedDifficulties([difficultyParam]);
+    }
+
+    if (languagesParam) {
+      setSelectedLanguages(languagesParam.split(","));
+    }
+
+    if (searchTerm) {
+      setSearchTerm(searchTerm);
+    }
+  }, [searchParams, searchTerm]);
 
   useEffect(() => {
     const result = projects.filter(
@@ -59,14 +82,24 @@ export default function ProjectsPage() {
     }
 
     setFilteredProjects(result);
-  }, [searchTerm, selectedCategory, selectedLanguages, selectedDifficulties, sortOption]);
+
+    // Update URL parameters
+    const params = new URLSearchParams();
+    if (selectedDifficulties.length > 0) {
+      params.set("difficulty", selectedDifficulties.join(","));
+    }
+    if (selectedLanguages.length > 0) {
+      params.set("languages", selectedLanguages.join(","));
+    }
+    router.push(`/projects?${params.toString()}`, { scroll: false });
+  }, [searchTerm, selectedCategory, selectedLanguages, selectedDifficulties, sortOption, router]);
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className=" py-24">
+      <div className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-5xl font-bold  mb-6">Open Source Projects</h1>
+            <h1 className="text-5xl font-bold mb-6">Open Source Projects</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
               Building technology for everyone, together. Discover our projects and join our
               community.
@@ -106,120 +139,136 @@ export default function ProjectsPage() {
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
-        {showFilters && (
-          <div className="w-full md:w-1/4 space-y-6">
-            <div className="space-y-1">
-              <h3 className="font-semibold mb-2">Difficulty</h3>
-              {difficultyLevels.map((level) => (
-                <div key={level} className="flex items-center space-x-2">
-                  <Checkbox
-                    className="h-5 w-5 border border-gray-100"
-                    id={`diff-${level}`}
-                    checked={selectedDifficulties.includes(level)}
-                    onCheckedChange={(checked) => {
-                      setSelectedDifficulties(
-                        checked
-                          ? [...selectedDifficulties, level]
-                          : selectedDifficulties.filter((d) => d !== level)
-                      );
-                    }}
-                  />
-                  <label htmlFor={`diff-${level}`}>{level}</label>
-                </div>
-              ))}
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Category</h3>
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All Categories</SelectItem>
-                  {projectCategories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1">
-              <h3 className="font-semibold mb-2">Programming Languages</h3>
-              {programmingLanguagesList.map((lang) => (
-                <div key={lang} className="flex items-center space-x-2">
-                  <Checkbox
-                    className="h-5 w-5 border border-gray-100"
-                    id={`lang-${lang}`}
-                    checked={selectedLanguages.includes(lang)}
-                    onCheckedChange={(checked) => {
-                      setSelectedLanguages(
-                        checked
-                          ? [...selectedLanguages, lang]
-                          : selectedLanguages.filter((l) => l !== lang)
-                      );
-                    }}
-                  />
-                  <label htmlFor={`lang-${lang}`}>{lang}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {showFilters && (
+            <motion.div
+              initial={{ opacity: 0.5, width: 0 }}
+              animate={{ opacity: 1, width: "25%" }}
+              exit={{ opacity: 0, width: 0 }}
+              transition={{ duration: 0.2 }}
+              className="w-full md:w-1/4 space-y-6"
+            >
+              <div className="space-y-1">
+                <h3 className="font-semibold mb-2">Difficulty</h3>
+                {difficultyLevels.map((level) => (
+                  <div key={level} className="flex items-center space-x-2">
+                    <Checkbox
+                      className="h-5 w-5 border border-gray-100"
+                      id={`diff-${level}`}
+                      checked={selectedDifficulties.includes(level)}
+                      onCheckedChange={(checked) => {
+                        setSelectedDifficulties(
+                          checked
+                            ? [...selectedDifficulties, level]
+                            : selectedDifficulties.filter((d) => d !== level)
+                        );
+                      }}
+                    />
+                    <label htmlFor={`diff-${level}`}>{level}</label>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <h3 className="font-semibold mb-2">Category</h3>
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="All">All Categories</SelectItem>
+                    {projectCategories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <h3 className="font-semibold mb-2">Programming Languages</h3>
+                {programmingLanguagesList.map((lang) => (
+                  <div key={lang} className="flex items-center space-x-2">
+                    <Checkbox
+                      className="h-5 w-5 border border-gray-100"
+                      id={`lang-${lang}`}
+                      checked={selectedLanguages.includes(lang)}
+                      onCheckedChange={(checked) => {
+                        setSelectedLanguages(
+                          checked
+                            ? [...selectedLanguages, lang]
+                            : selectedLanguages.filter((l) => l !== lang)
+                        );
+                      }}
+                    />
+                    <label htmlFor={`lang-${lang}`}>{lang}</label>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <div
-          className={`grid gap-6 transition-all duration-600 ${
-            showFilters ? "md:w-5/6" : "w-full"
+        <motion.div
+          layout
+          className={`grid gap-6 transition-all duration-300 ${
+            showFilters ? "md:w-3/4" : "w-full"
           } grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-fit`}
         >
-          {filteredProjects.map((project) => (
-            <Card
-              key={project.id}
-              className="group bg-slate-900/50 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 shadow-slate-400/50 h-fit"
-            >
-              <CardHeader className="flex items-center justify-between flex-row gap-2">
-                <CardTitle className="flex items-center gap-2 text-white text-lg">
-                  {project.name}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <div className=" flex items-center justify-between gap-3 w-full mb-4">
-                  <Badge variant="outline">{project.language}</Badge>
-                  <Badge
-                    className="font-light tracking-wide text-xs bg-white/10 text-white/50"
-                    variant="secondary"
-                  >
-                    {project.difficulty}
-                  </Badge>
-                </div>
-                <p className="text-muted-foreground">{project.description}</p>
-              </CardContent>
-              <CardFooter className=" flex items-center justify-start gap-3 w-full">
-                <Link
-                  href={`/projects/${project.name}`}
-                  className={buttonVariants({ variant: "default", className: "flex-grow" })}
-                >
-                  View Project
-                </Link>
-                <Link
-                  href={project.name}
-                  target="_blank"
-                  className={buttonVariants({
-                    className:
-                      " text-white/90 bg-white/30 p-2 rounded-full cursor-pointer hover:bg-white/50 transition-colors duration-200",
-                  })}
-                >
-                  <IconBrandGithub className="size-8" />
-                </Link>
-              </CardFooter>
-            </Card>
-          ))}
+          <AnimatePresence>
+            {filteredProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Card className="group bg-slate-900/50 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 shadow-slate-400/50 h-fit">
+                  <CardHeader className="flex items-center justify-between flex-row gap-2">
+                    <CardTitle className="flex items-center gap-2 text-white text-lg">
+                      {project.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <div className="flex items-center justify-between gap-3 w-full mb-4">
+                      <Badge variant="outline">{project.language}</Badge>
+                      <Badge
+                        className="font-light tracking-wide text-xs bg-white/10 text-white/50"
+                        variant="secondary"
+                      >
+                        {project.difficulty}
+                      </Badge>
+                    </div>
+                    <p className="text-muted-foreground">{project.description}</p>
+                  </CardContent>
+                  <CardFooter className="flex items-center justify-start gap-3 w-full">
+                    <Link
+                      href={`/projects/${project.name}`}
+                      className={buttonVariants({ variant: "default", className: "flex-grow" })}
+                    >
+                      View Project
+                    </Link>
+                    <Link
+                      href={project.name}
+                      target="_blank"
+                      className={buttonVariants({
+                        className:
+                          "text-white/90 bg-white/30 p-2 rounded-full cursor-pointer hover:bg-white/50 transition-colors duration-200",
+                      })}
+                    >
+                      <IconBrandGithub className="size-8" />
+                    </Link>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            ))}
+          </AnimatePresence>
           {filteredProjects.length === 0 && (
-            <div className="text-center text-muted-foreground mt-8 mx-auto w-[60vw]  ">
+            <div className="text-center text-muted-foreground mt-8 mx-auto w-[60vw]">
               <h1>No projects found matching your criteria.</h1>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
