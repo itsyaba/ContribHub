@@ -41,7 +41,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     const difficultyParam = searchParams.get("difficulty");
     const languagesParam = searchParams.get("languages");
-    const searchTermParams = searchParams.get("search");
+    // const searchTermParams = searchParams.get("search");
 
     if (difficultyParam) {
       setSelectedDifficulties([difficultyParam]);
@@ -243,7 +243,7 @@ export default function ProjectsPage() {
                   </CardContent>
                   <CardFooter className="flex items-center justify-start gap-3 w-full">
                     <Link
-                      href={`/projects/${project.name}`}
+                      href={`/projects/${project.id}`}
                       className={buttonVariants({ variant: "default", className: "flex-grow" })}
                     >
                       View Project
